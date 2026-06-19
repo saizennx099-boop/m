@@ -297,7 +297,7 @@
     h1 { font-size: 1.7rem; }
     .name { font-size: 1.9rem; }
     button { padding: 14px 28px; font-size: 1rem; }
-    .ring-scene { transform: scale(0.8); } /* Mobilde taşma yapmaması için ölçeklendirme */
+    .ring-scene { transform: scale(0.8); }
   }
 </style>
 </head>
@@ -316,7 +316,6 @@
   </div>
 
   <div class="result-screen" id="resultScreen">
-    
     <div class="ring-scene">
       <div class="ring-band" id="ringBand"></div>
       <div class="ring-mount">
@@ -346,9 +345,15 @@
 </div>
 
 <script>
-  // 3D Yüzük halkası dilimlerini JavaScript kullanarak dinamik üret
+  // Tarayıcı tamamen yüklendiğinde çalışacak güvenli tetikleyici
+  window.addEventListener('DOMContentLoaded', () => {
+    build3DRing();
+    createHearts();
+  });
+
   function build3DRing() {
     const band = document.getElementById('ringBand');
+    if (!band) return;
     const sliceCount = 90; 
     for (let i = 0; i < sliceCount; i++) {
       const slice = document.createElement('div');
@@ -357,9 +362,7 @@
       band.appendChild(slice);
     }
   }
-  build3DRing();
 
-  // Arka plandaki uçuşan kalpleri oluştur
   function createHearts() {
     const emojis = ['💖','💕','💗','💘','❤️','🌹'];
     setInterval(() => {
@@ -373,7 +376,6 @@
       setTimeout(() => heart.remove(), 12000);
     }, 450);
   }
-  createHearts();
 
   const noMessages = [
     "Emin misin? 🥺",
@@ -396,7 +398,6 @@
     noBtn.style.transform = `scale(${newSize})`;
     yesBtn.style.transform = `scale(${1 + noCount * 0.1})`;
 
-    const container = document.getElementById('questionCard');
     const maxX = 40, maxY = 20;
     const randX = (Math.random() - 0.5) * maxX;
     const randY = (Math.random() - 0.5) * maxY;
