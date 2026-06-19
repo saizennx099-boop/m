@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meryem 💖 - 3D Gül Sürprizli</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body, html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #ffb6c1, #ff69b4, #ff1493, #c71585);
+    background-size: 400% 400%;
+    animation: gradientShift 12s ease infinite;
+  }
+
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    z-index: 2;
+  }
+
+  /* Uçuşan kalpler */
+  .heart {
+    position: fixed;
+    top: -10%;
+    font-size: 24px;
+    color: rgba(255,255,255,0.7);
+    pointer-events: none;
+    animation: floatUp linear infinite;
+    z-index: 1;
+    user-select: none;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0.9; }
+    100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+  }
+
+  .card {
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(12px);
+    border-radius: 30px;
+    padding: 50px 35px;
+    max-width: 90%;
+    width: 480px;
+    box-shadow: 0 20px 60px rgba(199, 21, 133, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    z-index: 5;
+    position: relative;
+    animation: popIn 0.8s ease;
+  }
+
+  @keyframes popIn {
+    0% { transform: scale(0.7); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  h1 {
+    color: #fff;
+    font-size: 2.1rem;
+    margin-bottom: 10px;
+    text-shadow: 0 3px 12px rgba(0,0,0,0.25);
+  }
+
+  .name {
+    color: #fff0f5;
+    font-weight: 800;
+    font-size: 2.3rem;
+    display: block;
+    margin-bottom: 5px;
+    text-shadow: 0 3px 15px rgba(0,0,0,0.3);
+  }
+
+  p.subtitle {
+    color: #fff;
+    font-size: 1.1rem;
+    margin-bottom: 35px;
+    opacity: 0.95;
+    line-height: 1.5;
+  }
+
+  .buttons {
+    display: flex;
+    gap: 25px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  button {
+    border: none;
+    padding: 16px 40px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  }
+
+  #yesBtn {
+    background: linear-gradient(135deg, #ff4081, #e91e63);
+    color: white;
+  }
+
+  #yesBtn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 12px 28px rgba(233, 30, 99, 0.5);
+  }
+
+  #noBtn {
+    background: rgba(255,255,255,0.85);
+    color: #c2185b;
+  }
+
+  #noBtn:hover {
+    transform: scale(0.95);
+  }
+
+  .no-message {
+    margin-top: 20px;
+    color: #fff;
+    font-size: 1rem;
+    font-style: italic;
+    min-height: 24px;
+  }
+
+  /* ============ SONUÇ EKRANI ============ */
+  .result-screen {
+    display: none;
+    z-index: 5;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    animation: popIn 1s ease;
+  }
+
+  /* 3D Gül Sahnesi */
+  .rose-scene {
+    width: 250px;
+    height: 250px;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: rotateRose 12s linear infinite;
+    margin-bottom: 25px;
+  }
+
+  @keyframes rotateRose {
+    0% { transform: rotateY(0deg) rotateX(-15deg); }
+    100% { transform: rotateY(360deg) rotateX(-15deg); }
+  }
+
+  /* Gülün Genel Yapısı */
+  .rose-flower {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-style: preserve-3d;
+  }
+
+  /* Gül Yaprakları Grubu */
+  .rose-petals {
+    position: relative;
+    transform-style: preserve-3d;
+    transform: translateY(-40px);
+  }
+
+  .petal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-radius: 50% 50% 40% 40%;
+    background: linear-gradient(135deg, #ff1a40 0%, #b3001e 60%, #66000e 100%);
+    transform-origin: bottom center;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.5), 0 4px 10px rgba(0,0,0,0.3);
+  }
+
+  /* Katman Katman Yaprak Ayarları */
+  /* Merkez tomurcuk katmanı */
+  .petal.layer-1 {
+    width: 35px;
+    height: 55px;
+    margin-left: -17.5px;
+    margin-top: -55px;
+    background: linear-gradient(to bottom, #d60024, #52000b);
+  }
+
+  /* Orta katman */
+  .petal.layer-2 {
+    width: 55px;
+    height: 70px;
+    margin-left: -27.5px;
+    margin-top: -70px;
+  }
+
+  /* Dış katman */
+  .petal.layer-3 {
+    width: 75px;
+    height: 85px;
+    margin-left: -37.5px;
+    margin-top: -85px;
+    background: linear-gradient(135deg, #ff2e51 0%, #990014 70%, #4d000a 100%);
+  }
+
+  /* Gülün Sapı */
+  .rose-stem {
+    position: absolute;
+    top: 0;
+    left: -4px;
+    width: 8px;
+    height: 110px;
+    background: linear-gradient(90deg, #27692b, #3a9c41, #143d17);
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+
+  /* Saptaki Yeşil Yapraklar */
+  .rose-leaf {
+    position: absolute;
+    width: 35px;
+    height: 20px;
+    background: linear-gradient(135deg, #3a9c41, #1a521e);
+    border-radius: 50% 0 50% 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+  .leaf-left {
+    top: 35px;
+    left: -30px;
+    transform: rotate(-25deg) rotateY(30deg);
+  }
+  .leaf-right {
+    top: 55px;
+    left: 4px;
+    border-radius: 0 50% 0 50%;
+    transform: rotate(25deg) rotateY(-30deg);
+  }
+
+  /* Sonuç Ekni Yazıları */
+  .result-title {
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 10px 0;
+    text-shadow: 0 3px 15px rgba(0,0,0,0.3);
+  }
+
+  .result-text {
+    color: #fff0f5;
+    font-size: 1.15rem;
+    line-height: 1.7;
+    max-width: 420px;
+    margin-top: 10px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+
+  .signature {
+    margin-top: 25px;
+    color: #fff;
+    font-size: 1rem;
+    opacity: 0.85;
+    font-style: italic;
+  }
+
+  @media (max-width: 480px) {
+    .card { padding: 35px 22px; }
+    h1 { font-size: 1.7rem; }
+    .name { font-size: 1.9rem; }
+    button { padding: 14px 28px; font-size: 1rem; }
+    .rose-scene { transform: scale(0.85); }
+  }
+</style>
+</head>
+<body>
+
+<div class="container" id="container">
+
+  <div class="card" id="questionCard">
+    <h1>Bir sırrım var<br><span class="name">Meryem</span> 💗</h1>
+    <p class="subtitle">Senden çok hoşlanıyorum ve bunu sana söylemek istedim...<br><strong>Benimle çıkar mısın?</strong></p>
+    <div class="buttons">
+      <button id="yesBtn" onclick="sayYes()">Evet 🌹</button>
+      <button id="noBtn" onclick="sayNo()">Hayır</button>
+    </div>
+    <div class="no-message" id="noMessage"></div>
+  </div>
+
+  <div class="result-screen" id="resultScreen">
+    
+    <div class="rose-scene">
+      <div class="rose-flower">
+        <div class="rose-petals" id="rosePetals"></div>
+        <div class="rose-stem">
+          <div class="rose-leaf leaf-left"></div>
+          <div class="rose-leaf leaf-right"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="result-title">Beni çok mutlu ettin! 💕</div>
+    <div class="result-text">
+      Meryem, bu evet kelimesi şu an kalbimi inanılmaz hızlı çarptırdı.
+      Senin gibi birine sahip olmak çok özel.
+      Bundan sonra her gülüşüne, her anına ortak olmak için sabırsızlanıyorum.
+      İyi ki varsın. 🌹
+    </div>
+    <div class="signature">— sana aşık olan biri —</div>
+  </div>
+
+</div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    build3DRose();
+    createHearts();
+  });
+
+  // Gül yapraklarını 3 boyutlu uzayda matematiksel açılarla dağıtma fonksiyonu
+  function build3DRose() {
+    const petalsContainer = document.getElementById('rosePetals');
+    if (!petalsContainer) return;
+
+    // 1. Katman: Merkez sıkı tomurcuk (5 yaprak)
+    for (let i = 0; i < 5; i++) {
+      const p = document.createElement('div');
+      p.className = 'petal layer-1';
+      // Merkezde spiral sarmal görünüm için içeri bükme ve döndürme açısı
+      p.style.transform = `rotateY(${i * 72}deg) rotateX(-25deg) translateZ(8px)`;
+      petalsContainer.appendChild(p);
+    }
+
+    // 2. Katman: Orta açılan yapraklar (8 yaprak)
+    for (let i = 0; i < 8; i++) {
+      const p = document.createElement('div');
+      p.className = 'petal layer-2';
+      p.style.transform = `rotateY(${i * 45 + 20}deg) rotateX(-40deg) translateZ(16px)`;
+      petalsContainer.appendChild(p);
+    }
+
+    // 3. Katman: En dış geniş yapraklar (10 yaprak)
+    for (let i = 0; i < 10; i++) {
+      const p = document.createElement('div');
+      p.className = 'petal layer-3';
+      p.style.transform = `rotateY(${i * 36 + 10}deg) rotateX(-55deg) translateZ(28px)`;
+      petalsContainer.appendChild(p);
+    }
+  }
+
+  // Arka plandaki uçuşan kalpleri oluşturma fonksiyonu
+  function createHearts() {
+    const emojis = ['💖','💕','💗','💘','❤️','🌹'];
+    setInterval(() => {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.fontSize = (16 + Math.random() * 20) + 'px';
+      heart.style.animationDuration = (5 + Math.random() * 6) + 's';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 12000);
+    }, 450);
+  }
+
+  const noMessages = [
+    "Emin misin? 🥺",
+    "Bir daha düşün 👀",
+    "Lütfen ama 😭",
+    "Kalbim kırılıyor 💔",
+    "Son şansın bu 😅"
+  ];
+  let noCount = 0;
+
+  function sayNo() {
+    const noBtn = document.getElementById('noBtn');
+    const yesBtn = document.getElementById('yesBtn');
+    const msg = document.getElementById('noMessage');
+
+    msg.innerText = noMessages[noCount % noMessages.length];
+    noCount++;
+
+    const newSize = Math.max(0.5, 1 - noCount * 0.12);
+    noBtn.style.transform = `scale(${newSize})`;
+    yesBtn.style.transform = `scale(${1 + noCount * 0.1})`;
+
+    const maxX = 40, maxY = 20;
+    const randX = (Math.random() - 0.5) * maxX;
+    const randY = (Math.random() - 0.5) * maxY;
+    noBtn.style.position = 'relative';
+    noBtn.style.left = randX + 'px';
+    noBtn.style.top = randY + 'px';
+
+    if (noCount >= 6) {
+      noBtn.style.display = 'none';
+      msg.innerText = "Sanırım sadece 'Evet' seçeneği kaldı 😏💕";
+    }
+  }
+
+  function sayYes() {
+    document.getElementById('questionCard').style.display = 'none';
+    document.getElementById('resultScreen').style.display = 'flex';
+  }
+</script>
+
+</body>
+</html>
